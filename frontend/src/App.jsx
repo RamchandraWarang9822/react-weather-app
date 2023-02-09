@@ -7,7 +7,9 @@ const API_KEY = '3a498c282257d30502c5f1f298f9e6ad';
 
 const App = () => {
     const [city, setCity] = useState([]);
+    const [country, setCountry] = useState([]);
     const [data, setData] = useState([]);
+    const [firstLoad, setFirstLoad] = useState(false);
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
 
@@ -17,9 +19,12 @@ const App = () => {
                 alert("Enter City");
             } else {
                 const response = await Axios.get(url);
+                const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
+                const countryCode = await response.data.sys.country;
+                const countryName = regionNames.of(countryCode);
+                setCountry(countryName);
                 setData(response.data);
-                console.log(data);
-                console.log(response.data);
+                setFirstLoad(false);
             }
         }
     }
@@ -27,9 +32,14 @@ const App = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchData();
+        document.getElementById('fetch').value = ""
+
     }
 
-
+    useEffect(() => {
+        setFirstLoad(true);
+        fetchData();
+    }, []);
 
     return (
         <div className="App">
@@ -37,16 +47,18 @@ const App = () => {
                 <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 pb-5 shadow-2xl sm:rounded-3xl sm:px-16 sm:py-10 md:pt-24 lg:flex lg:gap-x-20 lg:px-30 lg:pt-0">
                     <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-8 lg:text-left ">
                         <div className="lg:py-6">
-                            {city?  data.weather &&(
+                            {!firstLoad?  (
                             <>
+                                { data.weather &&
                                 <div className="flex w-90 flex-row justify-evenly items-center flex-wrap">
                                     <div className="flex mt-1 mr-2 flex-row justify-evenly items-center">
                                         <div className="flex flex-col text-white font-bold text-6xl m-4 capitalize ">
                                             {data.name}
+                                            <span className="text-white font-light text-sm mt-3">{country}</span>
                                         </div>
                                     </div>
                                     <div className="flex mt-1 mr-2 flex-row justify-evenly items-center">
-                                        <div className="flex flex-col text-white font-bold text-4xl m-4">
+                                        <div className="flex flex-col text-white font-bold text-5xl m-4">
                                             {data.weather[0].main}
                                             
                                         </div>
@@ -70,7 +82,7 @@ const App = () => {
                                             <span className="text-white font-light text-sm">Wind Speed</span>
                                         </div>
                                     </div>
-                                </div>
+                                </div>}
                                 
                             </>
                             ) : (
@@ -89,10 +101,10 @@ const App = () => {
                                 <form className="sm:flex" method="GET">
                                     <div className="min-w-0 flex-1 ">
                                         <input
+                                            id='fetch'
                                             type="text"
                                             placeholder="Enter City"
                                             onChange={(e) => setCity(e.target.value)}
-                                            value={city}
                                             className="block w-full mb-5 border-gray-300 rounded-md shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
 
