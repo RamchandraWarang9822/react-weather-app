@@ -50,11 +50,11 @@ const App = () => {
                             {!firstLoad?  (
                             <>
                                 { data.weather &&
-                                <div className="flex w-90 flex-row justify-evenly items-center flex-wrap">
-                                    <div className="flex mt-1 mr-2 flex-row justify-evenly items-center">
-                                        <div className="flex flex-col text-white font-bold text-6xl m-4 capitalize ">
+                                    <div className="flex w-100 flex-row justify-evenly items-center flex-wrap">
+                                    <div className="flex mt-1 mr-2 flex-row justify-center items-center">
+                                        <div className="flex flex-col text-white font-bold text-6xl capitalize ">
                                             {data.name}
-                                            <span className="text-white font-light text-sm mt-3">{country}</span>
+                                            <span className="text-white font-light text-sm mt-3 ">{country}</span>
                                         </div>
                                     </div>
                                     <div className="flex mt-1 mr-2 flex-row justify-evenly items-center">
@@ -63,7 +63,7 @@ const App = () => {
                                             
                                         </div>
                                     </div>
-                                    
+                                    <div></div>
                                     <div className="flex mt-1 mr-2 flex-row justify-evenly items-center">
                                         <div className="flex flex-col text-white font-bold text-4xl m-4">
                                             {Math.floor(data.main.temp - 273.15)}
